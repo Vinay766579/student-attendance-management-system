@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Attendance Management System</title>
+
+  <!-- Google Font (if offline, the browser simply uses a default font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Our own CSS file (keep it in the same folder as this file) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- =====================================================
+       1. LOGIN SCREEN (shown first)
+       ===================================================== -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">🎓</div>
+      <h1>Student Attendance Management System</h1>
+      <p class="subtitle">Simple • Smart • Digital Attendance Management</p>
+
+      <form onsubmit="handleLogin(event)">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="off">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+
+        <p id="login-error" class="error-text"></p>
+
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+      </form>
+
+      <p class="demo-hint">Demo login: <strong>admin</strong> / <strong>admin123</strong></p>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       2. MAIN APPLICATION (hidden until login succeeds)
+       ===================================================== -->
+  <div id="app" class="app hidden">
+
+    <!-- Sidebar navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🎓</span>
+        <div>
+          <strong>Attendance System</strong>
+          <small>Teacher Panel</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-page="dashboard" onclick="showPage('dashboard')">📊 Dashboard</button>
+        <button class="nav-btn" data-page="students" onclick="showPage('students')">👩‍🎓 Students</button>
+        <button class="nav-btn" data-page="mark" onclick="showPage('mark')">✅ Mark Attendance</button>
+        <button class="nav-btn" data-page="records" onclick="showPage('records')">📅 Attendance Records</button>
+        <button class="nav-btn" data-page="percentage" onclick="showPage('percentage')">📈 Attendance %</button>
+      </nav>
+
+      <button class="nav-btn logout-btn" onclick="handleLogout()">🚪 Logout</button>
+    </aside>
+
+    <!-- Right side: top bar + pages -->
+    <div class="main-area">
+
+      <header class="topbar">
+        <button class="menu-btn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+        <div>
+          <h2 id="page-title">Dashboard</h2>
+          <p class="topbar-sub">Simple • Smart • Digital Attendance Management</p>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <!-- ================= DASHBOARD ================= -->
+        <section id="page-dashboard" class="page">
+          <div class="cards">
+            <div class="card stat-card">
+              <div class="stat-icon blue">🎓</div>
+              <div>
+                <p class="stat-label">Total Students</p>
+                <p class="stat-value" id="stat-total">0</p>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon green">✅</div>
+              <div>
+                <p class="stat-label">Present Today</p>
+                <p class="stat-value" id="stat-present">0</p>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon red">❌</div>
+              <div>
+                <p class="stat-label">Absent Today</p>
+                <p class="stat-value" id="stat-absent">0</p>
+              </div>
+            </div>
+
+            <div class="card stat-card">
+              <div class="stat-icon amber">📊</div>
+              <div>
+                <p class="stat-label">Average Attendance</p>
+                <p class="stat-value" id="stat-average">0%</p>
+              </div>
+            </div>
+          </div>
+
+          <p id="today-note" class="note-text"></p>
+
+          <div class="card">
+            <h3>Attendance Summary</h3>
+            <p class="muted">Attendance percentage of each student (green = good, red = low)</p>
+            <div id="chart" class="chart"></div>
+          </div>
+        </section>
+
+        <!-- ================= STUDENT MANAGEMENT ================= -->
+        <section id="page-students" class="page hidden">
+          <div class="card">
+            <h3 id="student-form-title">Add Student</h3>
+
+            <form class="form-grid" onsubmit="handleStudentSubmit(event)">
+              <div>
+                <label for="student-name">Student Name</label>
+                <input type="text" id="student-name" placeholder="e.g. Anu">
+              </div>
+              <div>
+                <label for="student-roll">Roll Number</label>
+                <input type="text" id="student-roll" placeholder="e.g. 101">
+              </div>
+              <div>
+                <label for="student-department">Department</label>
+                <input type="text" id="student-department" placeholder="e.g. CSE">
+              </div>
+              <div>
+                <label for="student-year">Year</label>
+                <select id="student-year">
+                  <option>1st Year</option>
+                  <option>2nd Year</option>
+                  <option selected>3rd Year</option>
+                  <option>4th Year</option>
+                </select>
+              </div>
+
+              <div class="form-buttons">
+                <button type="submit" id="student-submit-btn" class="btn btn-primary">Add Student</button>
+                <button type="button" id="student-cancel-btn" class="btn btn-light hidden" onclick="cancelEdit()">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Student List</h3>
+              <input type="text" id="student-search" class="search-box" placeholder="🔍 Search by name, roll or department" oninput="renderStudentTable()">
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="student-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= MARK ATTENDANCE ================= -->
+        <section id="page-mark" class="page hidden">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Mark Attendance</h3>
+                <p class="muted">Choose a date, mark every student, then click Save Attendance.</p>
+              </div>
+              <div class="date-picker">
+                <label for="attendance-date">Date</label>
+                <input type="date" id="attendance-date" onchange="loadMarksForDate()">
+              </div>
+            </div>
+
+            <div class="quick-buttons">
+              <button class="btn btn-light" onclick="markAll('Present')">Mark All Present</button>
+              <button class="btn btn-light" onclick="markAll('Absent')">Mark All Absent</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Mark</th>
+                  </tr>
+                </thead>
+                <tbody id="mark-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="save-row">
+              <button class="btn btn-primary" onclick="saveAttendance()">💾 Save Attendance</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ATTENDANCE RECORDS ================= -->
+        <section id="page-records" class="page hidden">
+          <div class="card">
+            <h3>Attendance Records</h3>
+
+            <div class="filter-row">
+              <div>
+                <label for="filter-date">Filter by Date</label>
+                <input type="date" id="filter-date" onchange="renderRecordsTable()">
+              </div>
+              <div>
+                <label for="filter-student">Filter by Student</label>
+                <select id="filter-student" onchange="renderRecordsTable()"></select>
+              </div>
+              <div class="filter-clear">
+                <button class="btn btn-light" onclick="clearFilters()">Clear Filters</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Roll No</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="records-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ATTENDANCE PERCENTAGE ================= -->
+        <section id="page-percentage" class="page hidden">
+          <div class="card">
+            <h3>Attendance Percentage</h3>
+            <p class="muted">
+              Attendance % = (Present Days ÷ Total Working Days) × 100.
+              Attendance of <strong>75% or more</strong> is Good, below 75% is Low.
+            </p>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Present Days</th>
+                    <th>Working Days</th>
+                    <th>Percentage</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="percentage-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Small pop-up message (used after saving, adding, deleting...) -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Our own JavaScript file (keep it in the same folder as this file) -->
+  <script src="script.js"></script>
+</body>
+</html>

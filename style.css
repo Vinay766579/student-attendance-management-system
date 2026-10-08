@@ -1,0 +1,599 @@
+/* =========================================================
+   Student Attendance Management System - style.css
+   ========================================================= */
+
+/* ---------- 1. Colours and basic settings ---------- */
+:root {
+  --sidebar-bg: #12304a;      /* dark blue sidebar */
+  --primary: #1f7a8c;         /* teal - main buttons */
+  --primary-dark: #17606f;
+  --page-bg: #f3f6f9;         /* light grey-blue background */
+  --card-bg: #ffffff;
+  --text: #1e2a36;
+  --muted: #6b7a89;
+  --border: #e1e8ee;
+  --green: #1b8a5a;
+  --green-light: #dff5ea;
+  --red: #c0392b;
+  --red-light: #fbe4e1;
+  --amber: #b7791f;
+  --amber-light: #fdf0d5;
+  --blue-light: #dcecf5;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.hidden {
+  display: none !important;
+}
+
+h1, h2, h3 {
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.note-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: -4px 0 18px;
+}
+
+/* ---------- 2. Form elements and buttons ---------- */
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-light {
+  background: #eaf0f5;
+  color: var(--text);
+}
+
+.btn-light:hover {
+  background: #dbe5ed;
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.btn-edit {
+  background: var(--blue-light);
+  color: #1b5f7a;
+}
+
+.btn-delete {
+  background: var(--red-light);
+  color: var(--red);
+}
+
+/* ---------- 3. Login screen ---------- */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #12304a 0%, #1f7a8c 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  padding: 32px 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.login-card h1 {
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+
+.login-card .subtitle {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 22px;
+}
+
+.login-card form {
+  text-align: left;
+}
+
+.login-card input {
+  margin-bottom: 14px;
+}
+
+.login-logo {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+}
+
+.error-text {
+  color: var(--red);
+  font-size: 0.85rem;
+  min-height: 20px;
+}
+
+.demo-hint {
+  margin-top: 18px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* ---------- 4. App layout (sidebar + main area) ---------- */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: var(--sidebar-bg);
+  color: #fff;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  transition: transform 0.25s;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 18px;
+}
+
+.brand-icon {
+  font-size: 1.8rem;
+}
+
+.sidebar-brand strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.sidebar-brand small {
+  color: #a9bdcc;
+  font-size: 0.78rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.nav-btn {
+  background: transparent;
+  color: #d3e0ea;
+  border: none;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.logout-btn {
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.main-area {
+  flex: 1;
+  margin-left: 250px;
+  min-width: 0; /* stops wide tables from stretching the page */
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar h2 {
+  font-size: 1.3rem;
+}
+
+.topbar-sub {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.menu-btn {
+  display: none;
+  background: #eaf0f5;
+  border: none;
+  font-size: 1.3rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.content {
+  padding: 24px 28px;
+}
+
+/* ---------- 5. Cards ---------- */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 0;
+}
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-icon.blue  { background: var(--blue-light); }
+.stat-icon.green { background: var(--green-light); }
+.stat-icon.red   { background: var(--red-light); }
+.stat-icon.amber { background: var(--amber-light); }
+
+.stat-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* ---------- 6. Simple bar chart (made with plain divs) ---------- */
+.chart {
+  margin-top: 8px;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 50px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.chart-track {
+  background: #edf2f6;
+  border-radius: 20px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.4s;
+}
+
+.chart-bar.good { background: var(--green); }
+.chart-bar.low  { background: var(--red); }
+
+.chart-value {
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ---------- 7. Forms layout ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+  align-items: end;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.search-box {
+  max-width: 320px;
+}
+
+.date-picker {
+  min-width: 180px;
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.save-row {
+  margin-top: 18px;
+  text-align: right;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 14px 0 18px;
+  align-items: end;
+}
+
+/* ---------- 8. Tables ---------- */
+.table-wrap {
+  overflow-x: auto; /* table scrolls sideways on small screens */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th {
+  text-align: left;
+  background: #f1f5f8;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 12px 14px;
+  white-space: nowrap;
+}
+
+th:first-child { border-radius: 10px 0 0 10px; }
+th:last-child  { border-radius: 0 10px 10px 0; }
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.empty-row {
+  text-align: center;
+  color: var(--muted);
+  padding: 26px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ---------- 9. Status badges and Present / Absent buttons ---------- */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-present { background: var(--green-light); color: var(--green); }
+.badge-absent  { background: var(--red-light);   color: var(--red); }
+.badge-none    { background: #e9eef2;            color: var(--muted); }
+.badge-good    { background: var(--green-light); color: var(--green); }
+.badge-low     { background: var(--red-light);   color: var(--red); }
+
+.mark-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-present,
+.btn-absent {
+  background: #fff;
+  border: 2px solid var(--border);
+  color: var(--muted);
+}
+
+.btn-present:hover { border-color: var(--green); color: var(--green); }
+.btn-absent:hover  { border-color: var(--red);   color: var(--red); }
+
+/* the selected button becomes filled with colour */
+.btn-present.selected { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-absent.selected  { background: var(--red);   border-color: var(--red);   color: #fff; }
+
+/* percentage bar inside the table */
+.percent-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 170px;
+}
+
+.percent-cell .chart-track {
+  flex: 1;
+  height: 8px;
+}
+
+.percent-cell strong {
+  width: 52px;
+}
+
+/* ---------- 10. Toast message ---------- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--sidebar-bg);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+}
+
+.toast.error {
+  background: var(--red);
+}
+
+/* ---------- 11. Mobile / small screens ---------- */
+@media (max-width: 800px) {
+  .sidebar {
+    transform: translateX(-100%);   /* hide sidebar off-screen */
+  }
+
+  .sidebar.open {
+    transform: translateX(0);       /* show it when menu is clicked */
+  }
+
+  .main-area {
+    margin-left: 0;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+
+  .topbar,
+  .content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .topbar-sub {
+    display: none;
+  }
+
+  .chart-row {
+    grid-template-columns: 70px 1fr 44px;
+  }
+
+  .save-row .btn {
+    width: 100%;
+  }
+}
